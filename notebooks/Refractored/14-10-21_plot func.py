@@ -36,8 +36,8 @@ def heatmaps(model_name,var,target,y_plus,normalize):
     import os
     import matplotlib.pyplot as plt
 
-    model_path=os.path.join("/home/au643300/DataHandling/models/trained/",model_name)
-    output_path='/home/au643300/DataHandling/reports/figures'
+    model_path=os.path.join("/home/au567859/DataHandling/models/trained/",model_name)
+    output_path='/home/au567859/DataHandling/reports/figures'
     data_path=slices.slice_loc(y_plus,var,target,normalize)+"/"
     data_folder=os.path.basename(os.path.dirname(data_path))
 
@@ -171,8 +171,8 @@ import shutil
 import os
 import matplotlib.pyplot as plt
 
-model_path=os.path.join("/home/au643300/DataHandling/models/trained/",model_name)
-output_path='/home/au643300/DataHandling/reports/figures'
+model_path=os.path.join("/home/au567859/DataHandling/models/trained/",model_name)
+output_path='/home/au567859/DataHandling/reports/figures'
 data_path=slices.slice_loc(y_plus,var,target,normalize)+"/"
 data_folder=os.path.basename(os.path.dirname(data_path))
 

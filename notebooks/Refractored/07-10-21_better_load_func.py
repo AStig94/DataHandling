@@ -19,7 +19,7 @@ import json
 
 #%%
 
-df=xr.open_zarr("/home/au643300/DataHandling/data/interim/data.zarr")
+df=xr.open_zarr("/home/au567859/DataHandling/data/interim/data.zarr")
 
 y_plus=15
 var=['u_vel']
@@ -31,7 +31,7 @@ slices.save_tf(y_plus,var,target,df)
 
 
 #%%
-save_loc=os.path.join("/home/au643300/DataHandling/data/processed",'y_plus_'+str(y_plus))+"_var_"+str(len(var))
+save_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus))+"_var_"+str(len(var))
 
 data=slices.load_from_scratch(15,var)
 

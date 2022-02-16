@@ -33,7 +33,7 @@ client,cluster=utility.slurm_q64(2)
 
 #%%
 
-data=xr.open_zarr('/home/au643300/DataHandling/data/interim/data.zarr')
+data=xr.open_zarr('/home/au567859/DataHandling/data/interim/data.zarr')
 
 
 #%%

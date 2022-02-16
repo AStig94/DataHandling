@@ -30,7 +30,7 @@ from DataHandling.data_raw.make_dataset import readDNSdata
 
 #%%
 
-data=xr.open_zarr('/home/au643300/DataHandling/data/interim/data.zarr')
+data=xr.open_zarr('/home/au567859/DataHandling/data/interim/data.zarr')
 
 u_vel=data.isel(time=0)['u_vel'].values
 
@@ -69,7 +69,7 @@ f.suptitle('Data from xarray')
 #%%
 #Trying to read data directly from .u file
 
-quantities, _, xf, yf, zf, length, _, _ = readDNSdata('/home/au643300/NOBACKUP/run/21_02_24/field.0493.u')
+quantities, _, xf, yf, zf, length, _, _ = readDNSdata('/home/au567859/NOBACKUP/run/21_02_24/field.0493.u')
 
 #%%
 

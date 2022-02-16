@@ -6,7 +6,7 @@ import os
 import numpy as np
 import xarray as xr
 
-raw = "/home/au643300/DataHandling/data/raw/"
+raw = "/home/au567859/DataHandling/data/raw/"
 
 files = glob.glob(raw + '*.u')
 files = sorted(files)

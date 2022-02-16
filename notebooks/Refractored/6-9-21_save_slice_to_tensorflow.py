@@ -3,7 +3,7 @@
 
 Args:
     y_plus (int): The chosen y+ value
-    data (str, optional): Data location. Defaults to "/home/au643300/NOBACKUP/data/interim/data.zarr/".
+    data (str, optional): Data location. Defaults to "/home/au567859/NOBACKUP/data/interim/data.zarr/".
 
 Returns:
     None: 
@@ -21,7 +21,7 @@ import tensorflow.train as tft
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 
-data="/home/au643300/DataHandling/data/interim/data.zarr"
+data="/home/au567859/DataHandling/data/interim/data.zarr"
 y_plus=15
 
 def custom_optimize(dsk, keys):
@@ -112,7 +112,7 @@ np.random.shuffle(train)
 #%%
 
 
-save_loc="/home/au643300/DataHandling/data/processed"+"/y_plus_"+str(y_plus)
+save_loc="/home/au567859/DataHandling/data/processed"+"/y_plus_"+str(y_plus)
 
 
 options = tf.io.TFRecordOptions(compression_type="GZIP")

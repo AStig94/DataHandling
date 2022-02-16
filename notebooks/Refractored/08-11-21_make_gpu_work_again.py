@@ -105,5 +105,5 @@ early_stopping_cb = keras.callbacks.EarlyStopping(patience=patience,
 restore_best_weights=True)
 model.fit(x=train,epochs=100000,validation_data=validation)
 
-model.save(os.path.join("/home/au643300/DataHandling/models/trained",wandb.run.name))
+model.save(os.path.join("/home/au567859/DataHandling/models/trained",wandb.run.name))
 

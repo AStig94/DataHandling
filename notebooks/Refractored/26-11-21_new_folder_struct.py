@@ -31,9 +31,9 @@ def slice_loc(y_plus,var,target,normalized):
     target_string="_".join(target_sort)
 
     if normalized==True:
-        slice_loc=os.path.join("/home/au643300/DataHandling/data/processed",'y_plus_'+str(y_plus)+"_VARS-"+var_string+"_TARGETS-"+target_string+"_normalized")
+        slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"_VARS-"+var_string+"_TARGETS-"+target_string+"_normalized")
     else:
-        slice_loc=os.path.join("/home/au643300/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string)
+        slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string)
 
     return slice_loc
 

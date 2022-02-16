@@ -1,9 +1,9 @@
 
-def append_tozarr(store="/home/au643300/DataHandling/data/interim/data.zarr"):
+def append_tozarr(store="/home/au567859/DataHandling/data/interim/data.zarr"):
     """appends new u files or creates a new zarr  array
 
     Args:
-        store (Path, optional): where to put the zarr array. Defaults to "/home/au643300/DataHandling/data/interim/data.zarr".
+        store (Path, optional): where to put the zarr array. Defaults to "/home/au567859/DataHandling/data/interim/data.zarr".
 
     Returns:
         None: 
@@ -13,7 +13,7 @@ def append_tozarr(store="/home/au643300/DataHandling/data/interim/data.zarr"):
     import numpy as np
     import xarray as xr
 
-    raw = "/home/au643300/DataHandling/data/raw/"
+    raw = "/home/au567859/DataHandling/data/raw/"
 
     files = glob.glob(raw + '*.u')
     files = sorted(files)
@@ -57,11 +57,11 @@ def append_tozarr(store="/home/au643300/DataHandling/data/interim/data.zarr"):
     return None
 
 
-def netcdf_save(interim="/home/au643300/NOBACKUP/data/interim/snapshots/"):
+def netcdf_save(interim="/home/au567859/NOBACKUP/data/interim/snapshots/"):
     """LEGACY Saves .u files to netcdf files
 
     Args:
-        interim (str, optional): the default save location. Defaults to "/home/au643300/NOBACKUP/data/interim/snapshots/".
+        interim (str, optional): the default save location. Defaults to "/home/au567859/NOBACKUP/data/interim/snapshots/".
     """
 
     import glob
@@ -70,7 +70,7 @@ def netcdf_save(interim="/home/au643300/NOBACKUP/data/interim/snapshots/"):
     import numpy as np
     import xarray as xr
 
-    raw = "/home/au643300/DataHandling/data/raw/"
+    raw = "/home/au567859/DataHandling/data/raw/"
 
     #%%
     raw_files = glob.glob(raw + '*.u')

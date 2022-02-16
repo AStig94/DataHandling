@@ -17,7 +17,7 @@ import os
 
 
 
-dt=xr.open_zarr('/home/au643300/DataHandling/data/interim/data.zarr')
+dt=xr.open_zarr('/home/au567859/DataHandling/data/interim/data.zarr')
 
 Re = 10400 #Direct from simulation
 nu = 1/Re #Kinematic viscosity

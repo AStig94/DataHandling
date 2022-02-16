@@ -33,7 +33,7 @@ from DataHandling.models import models
 #%%
 
 
-slice_array=xr.open_zarr("/home/au643300/DataHandling/data/interim/data.zarr")
+slice_array=xr.open_zarr("/home/au567859/DataHandling/data/interim/data.zarr")
 
     
 #%%

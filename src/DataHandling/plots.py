@@ -851,7 +851,7 @@ def stat_plots(mean_dataset_loc,batches):
     ax2.grid(True, which="both", linestyle='--')
     ax2.legend(prop={"size": 17})
     plt.tight_layout()
-    plt.savefig("/home/au643300/DataHandling/reports/figures/u_val.pdf", bbox_inches='tight')
+    plt.savefig("/home/au567859/DataHandling/reports/figures/u_val.pdf", bbox_inches='tight')
 
     a = get_valdata('pr1')
     b = get_valdata('pr71')
@@ -916,5 +916,5 @@ def stat_plots(mean_dataset_loc,batches):
     ax2.legend(loc='best', prop={"size": 15})
 
     plt.tight_layout()
-    plt.savefig("/home/au643300/DataHandling/reports/figures/Pr_val.pdf", bbox_inches='tight')
+    plt.savefig("/home/au567859/DataHandling/reports/figures/Pr_val.pdf", bbox_inches='tight')
 

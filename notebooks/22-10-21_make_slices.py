@@ -12,7 +12,7 @@ import xarray as xr
 
 
 
-df=xr.open_zarr("/home/au643300/DataHandling/data/interim/data.zarr")
+df=xr.open_zarr("/home/au567859/DataHandling/data/interim/data.zarr")
 
 
 

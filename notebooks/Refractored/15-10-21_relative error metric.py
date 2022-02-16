@@ -101,7 +101,7 @@ fluc_list,err=error(feature_list,target_list,names,model_name,var,target,y_plus,
 
 #%%
 
-model_path=os.path.join("/home/au643300/DataHandling/models/trained/",model_name)
+model_path=os.path.join("/home/au567859/DataHandling/models/trained/",model_name)
 data_path=slices.slice_loc(y_plus,var,target,normalize)+"/"
 data_folder=os.path.basename(os.path.dirname(data_path))
 

@@ -2,7 +2,7 @@
 #%%
 
 
-
+#%%
 
 """ Det her er et ufærdigt script som jeg har brugt til at tjekke error rumligt. Alt det som ikke er i en func er taget direkte fra plots_new_approch """
 
@@ -21,14 +21,14 @@ from zipfile import BadZipfile
 import shutil
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
-
+#import seaborn as sns
+#%%
 
 overwrite=False
 overwrite_pics=True
 
 
-path_of_output="/home/au643300/DataHandling/models/output"
+path_of_output="/home/au567859/DataHandling/models/output"
 name_list, _ = utility.get_runs_wandb()
 
 #slurm_arrary_id = int(os.getenv('SLURM_ARRAY_TASK_ID'))

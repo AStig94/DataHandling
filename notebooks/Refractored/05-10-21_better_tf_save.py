@@ -133,7 +133,7 @@ def save_tf(y_plus,var,data):
     slice_array=slice_array.compute()
 
 
-    save_loc=os.path.join("/home/au643300/DataHandling/data/processed",'y_plus_'+str(y_plus))
+    save_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus))
 
 
     #shuffle the data, split into 3 parts and save

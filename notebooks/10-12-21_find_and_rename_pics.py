@@ -15,12 +15,12 @@ import shutil
 
 name_list, _ = utility.get_runs_wandb()
 
-output_path="/home/au643300/DataHandling/models/output"
+output_path="/home/au567859/DataHandling/models/output"
 
 
 
 for model in name_list:
-    fig_folder_path="/home/au643300/DataHandling/reports/figures"
+    fig_folder_path="/home/au567859/DataHandling/reports/figures"
     fig_path=os.path.join(fig_folder_path,model)
 
     if not os.path.exists(fig_path):

@@ -6,14 +6,14 @@
 
 # #%%
 
-# targ=np.load('/home/au643300/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/targets.npz',allow_pickle=True)
-# pred=np.load('/home/au643300/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/predictions.npz',allow_pickle=True)
+# targ=np.load('/home/au567859/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/targets.npz',allow_pickle=True)
+# pred=np.load('/home/au567859/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/predictions.npz',allow_pickle=True)
 
 # target_list=[targ["train"],targ["val"],targ["test"]]
 # predctions=[pred["train"],pred["val"],pred["test"]]
 # names=['train','validation','test']
 
-# output_path='/home/au643300/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/'
+# output_path='/home/au567859/DataHandling/models/output/icy-fire-52/y_plus_15-VARS-u_vel-TARGETS-pr0.71_flux/'
 
 # target=["pr0.71_flux"]
 

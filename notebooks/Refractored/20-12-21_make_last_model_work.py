@@ -24,7 +24,7 @@ name_list, _ = utility.get_runs_wandb()
 #%%
 
 model=name_list[1]
-path_of_output="/home/au643300/DataHandling/models/output"
+path_of_output="/home/au567859/DataHandling/models/output"
 full_dir=os.path.join(path_of_output,model)
 subdirs=os.listdir(full_dir)
 
@@ -55,8 +55,8 @@ elif target[0] == 'tau_wall':
 model_path, output_path =utility.model_output_paths(model,y_plus,var,target,normalize)
 
 
-pred=np.load("/home/au643300/DataHandling/models/output/twilight-aardvark-71/y_plus_15-VARS-pr0.025_u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/predictions.npz")
-targ=np.load("/home/au643300/DataHandling/models/output/twilight-aardvark-71/y_plus_15-VARS-pr0.025_u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/targets.npz")
+pred=np.load("/home/au567859/DataHandling/models/output/twilight-aardvark-71/y_plus_15-VARS-pr0.025_u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/predictions.npz")
+targ=np.load("/home/au567859/DataHandling/models/output/twilight-aardvark-71/y_plus_15-VARS-pr0.025_u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/targets.npz")
 
 
 target_list=[targ["train"],targ["val"],targ["test"]]
@@ -175,7 +175,7 @@ overwrite=False
 vars=["u_vel","v_vel","w_vel","pr0.025"]
 target=["pr0.025_flux"]
 normalize=False
-model=keras.models.load_model("/home/au643300/DataHandling/models/trained/twilight-aardvark-71")
+model=keras.models.load_model("/home/au567859/DataHandling/models/trained/twilight-aardvark-71")
 y_plus=15
 pr_number="pr0.025"
 for layer in model.layers:

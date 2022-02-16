@@ -29,11 +29,11 @@ from DataHandling.features.slices import load
 #%%
 
 
-test=load('/home/au643300/DataHandling/data/processed/y_plus_15_test',repeat=(2))
+test=load('/home/au567859/DataHandling/data/processed/y_plus_15_test',repeat=(2))
 
-train=load('/home/au643300/DataHandling/data/processed/y_plus_15_test',repeat=(2))
+train=load('/home/au567859/DataHandling/data/processed/y_plus_15_test',repeat=(2))
 
-validation=load('/home/au643300/DataHandling/data/processed/y_plus_15_test',repeat=(2))
+validation=load('/home/au567859/DataHandling/data/processed/y_plus_15_test',repeat=(2))
 
 #%%
 
@@ -68,7 +68,7 @@ model.compile(loss="mean_squared_error", optimizer="Adam")
 
 
 #%%
-backup='/home/au643300/DataHandling/models/backup/'
+backup='/home/au567859/DataHandling/models/backup/'
 
 str_time=time.strftime("%d-%m-%Y_%H%M")
 backup_dir = os.path.join(backup, str_time)
@@ -84,4 +84,4 @@ model.fit(x=test,epochs=300,validation_data=validation,callbacks=[WandbCallback(
 
 
 
-model.save("/home/au643300/DataHandling/models/trained/CNN_like_gustanoi_Conv2DTranspose.h5")
+model.save("/home/au567859/DataHandling/models/trained/CNN_like_gustanoi_Conv2DTranspose.h5")

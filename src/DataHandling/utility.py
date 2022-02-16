@@ -24,10 +24,10 @@ def model_output_paths(model_name,y_plus,var,target,normalized):
     import os
     from DataHandling.features import slices
 
-    model_path=os.path.join("/home/au643300/DataHandling/models/trained/",model_name)
+    model_path=os.path.join("/home/au567859/DataHandling/models/trained/",model_name)
     data_path=slices.slice_loc(y_plus,var,target,normalized)+"/"
     data_folder=os.path.basename(os.path.dirname(data_path))
-    output_path='/home/au643300/DataHandling/models/output'
+    output_path='/home/au567859/DataHandling/models/output'
     output_path=os.path.join(output_path,model_name)
     output_path=os.path.join(output_path,data_folder)
     
@@ -85,8 +85,8 @@ def get_run_dir(wand_run_name):
     import os
 
 
-    root_backupdir= os.path.join('/home/au643300/DataHandling/models', "backup")
-    root_logdir = os.path.join('/home/au643300/DataHandling/models', "logs")
+    root_backupdir= os.path.join('/home/au567859/DataHandling/models', "backup")
+    root_logdir = os.path.join('/home/au567859/DataHandling/models', "logs")
     run_id = time.strftime("run_%Y_%m_%d-%H_%M-")
 
     logdir=os.path.join(root_logdir, run_id+wand_run_name)

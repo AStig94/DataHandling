@@ -31,7 +31,7 @@ client,cluster = utility.slurm_q64(2)
 
 #%%
 
-df=xr.open_zarr("/home/au643300/DataHandling/data/interim/data.zarr")
+df=xr.open_zarr("/home/au567859/DataHandling/data/interim/data.zarr")
 
 
 df=df[['u_vel','v_vel']]

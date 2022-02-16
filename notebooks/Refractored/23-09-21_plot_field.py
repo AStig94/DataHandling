@@ -26,7 +26,7 @@ from DataHandling.features.slices import load
 import seaborn as sns
 
 
-data=xr.open_zarr('/home/au643300/DataHandling/data/interim/data.zarr')
+data=xr.open_zarr('/home/au567859/DataHandling/data/interim/data.zarr')
 
 
 Re_Tau = 395 #Direct from simulation
@@ -59,9 +59,9 @@ plt.title('test of tau_w to check for spots')
 
 
 #%%
-model=keras.models.load_model('/home/au643300/DataHandling/models/trained/CNN_like_gustanoi_Conv2DTranspose.h5')
+model=keras.models.load_model('/home/au567859/DataHandling/models/trained/CNN_like_gustanoi_Conv2DTranspose.h5')
 
-test=load('/home/au643300/DataHandling/data/processed/y_plus_15_test',repeat=(1))
+test=load('/home/au567859/DataHandling/data/processed/y_plus_15_test',repeat=(1))
 
 for item in test.take(1):
     u_vel_tensorflow=item[0]

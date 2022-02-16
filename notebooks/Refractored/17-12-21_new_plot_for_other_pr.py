@@ -187,8 +187,8 @@ import numpy as np
 
 
 
-pre_path="/home/au643300/DataHandling/models/output/copper-pyramid-66/y_plus_15-VARS-u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/predictions.npz"
-target_path="/home/au643300/DataHandling/models/output/copper-pyramid-66/y_plus_15-VARS-u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/targets.npz"
+pre_path="/home/au567859/DataHandling/models/output/copper-pyramid-66/y_plus_15-VARS-u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/predictions.npz"
+target_path="/home/au567859/DataHandling/models/output/copper-pyramid-66/y_plus_15-VARS-u_vel_v_vel_w_vel-TARGETS-pr0.025_flux/targets.npz"
 
 
 pred=np.load(pre_path)
