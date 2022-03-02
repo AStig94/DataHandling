@@ -83,7 +83,6 @@ def threeD_plot(error_val,output_path):
 
 def pdf_plots(error_fluc,names,output_path,target_type):
     """Makes both boxplot and pdf plot for the errors.
-
     Args:
         error_fluc (list): list of the train,validation,test errors in local form
         names (list): list of the names of the data. Normally train,validaiton,test
