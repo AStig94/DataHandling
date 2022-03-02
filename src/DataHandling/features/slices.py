@@ -1,4 +1,32 @@
+def periodic_padding_flexible(tensor, axis, padding):
+    """
+        add periodic padding to a tensor for specified axis
+        tensor: input tensor
+        axis: on or multiple axis to pad along, int or tuple
+        padding: number of cells to pad, int or tuple
 
+        return: padded tensor
+    """
+
+
+    if isinstance(axis,int):
+        axis = (axis,)
+    if isinstance(padding,int):
+        padding = (padding,)
+
+    ndim = len(tensor.shape)
+    for ax,p in zip(axis,padding):
+        # create a slice object that selects everything from all axes,
+        # except only 0:p for the specified for right, and -p: for left
+
+        ind_right = [slice(-p,None) if i == ax else slice(None) for i in range(ndim)]
+        ind_left = [slice(0, p) if i == ax else slice(None) for i in range(ndim)]
+        right = tensor[ind_right]
+        left = tensor[ind_left]
+        middle = tensor
+        tensor = tf.concat([right,middle,left], axis=ax)
+
+    return tensor
 
 
 
@@ -175,6 +203,7 @@ def load_validation(y_plus,var,target,normalized):
     dataset = tf.data.TFRecordDataset([data_loc],compression_type='GZIP',buffer_size=100,num_parallel_reads=tf.data.experimental.AUTOTUNE)
     dataset=dataset.map(lambda x: read_tfrecords(x,features_dict,target),num_parallel_calls=tf.data.experimental.AUTOTUNE)
     dataset=dataset.batch(len_data_val)
+    #OBS!! her burde de vel være len_data_train???? Eller er det datasæt bare for stort??
     #dataset=dataset.batch(10)
     dataset=dataset.take(1)
     for i in dataset:

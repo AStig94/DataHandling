@@ -1,11 +1,8 @@
-
 def threeD_plot(error_val,output_path):
     """3d KDE of the errors
-
     Args:
         error_val (numpy array): the errors
         output_path (Path): where to save
-
     Returns:
         None: 
     """
@@ -224,7 +221,7 @@ def error(target_list,target_type,names,predctions,output_path):
 
         
 
-        error_fluct.to_parquet(os.path.join(output_path,'Error_fluct_'+names[i]+'.parquet'))
+        error_fluct.to_parquet(os.path.join(output_path,'Error_fluct_'+names[i]+'.parquet'),engine='fastparquet',compression='GZIP')
         error_fluc_list.append(error_fluct)
         
 
@@ -617,18 +614,15 @@ def heatmap_quarter(predctions,target_list,output_path,target):
 
 def heatmaps(target_list,names,predctions,output_path,model_path,target):
     """makes heatmaps of the Train validation and test data for target and prediction. Also plots the difference. Save to the output folder
-
     Args:
         target_list (list): list of arrays of the target
         names (list): list of names for the target_list
         predctions (list): list of array of the prediction
         output_path (Path): Path to the output folder
         model_path (Path): Path to the saved model
-
     Raises:
         Exception: if the target has no defined plot name
         Exception: Same as above
-
     Returns:
         None: 
     """
@@ -701,7 +695,7 @@ def heatmaps(target_list,names,predctions,output_path,model_path,target):
     fig, axs=plt.subplots(2,3,figsize=([21*cm,10*cm]),sharex=True,sharey=True,constrained_layout=False,dpi=150)
 
 
-    #TODO lavet det her om så akserne passer på den 1/4 cut jeg har lavet
+    #TODO lavet det her om s� akserne passer p� den 1/4 cut jeg har lavet
     
     #max length in plus units
     x_plus_max=12*u_tau/nu
@@ -850,7 +844,7 @@ def stat_plots(mean_dataset_loc,batches):
     ax2.grid(True, which="both", linestyle='--')
     ax2.legend(prop={"size": 17})
     plt.tight_layout()
-    plt.savefig("/home/au567859/DataHandling/reports/figures/u_val.pdf", bbox_inches='tight')
+    plt.savefig("/home/au643300/DataHandling/reports/figures/u_val.pdf", bbox_inches='tight')
 
     a = get_valdata('pr1')
     b = get_valdata('pr71')
@@ -915,5 +909,4 @@ def stat_plots(mean_dataset_loc,batches):
     ax2.legend(loc='best', prop={"size": 15})
 
     plt.tight_layout()
-    plt.savefig("/home/au567859/DataHandling/reports/figures/Pr_val.pdf", bbox_inches='tight')
-
+    plt.savefig("/home/au643300/DataHandling/reports/figures/Pr_val.pdf", bbox_inches='tight')

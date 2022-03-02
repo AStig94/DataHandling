@@ -4,28 +4,15 @@
 #SBATCH --cpus-per-task 4
 #SBATCH --mincpus=4
 #SBATCH --time=0-20:00:00
-#SBATCH --mem=15gb
+#SBATCH --mem=40gb
 #SBATCH -p q32g
 #SBATCH --gres gpu
 
 
-
-#  srun python3 -u extractFeatures.py
-# #srun python3 -u mainSnapEval.py
-# #srun python3 -u mainPlanes.py
-# #srun python3 -u mainSnapEval_stats.py
-#srun python3 -u for_run.py
 source /home/${USER}/.bashrc
 conda activate tf_gpu
 
-#srun python3 -u /home/au567859/DataHandling/notebooks/30_09_21_CNN_proper_transpose_elu.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/19-11-21_fukiama_model_all_vels.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/19-11-21_Heat_all_vels.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/19-11-21_fukiama_model_all_vels.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/23-11-21_fukiama_model_bigger_network.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/25-11-21_heat_all_vels_plus_pr.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/06-12-21_final_model_all_vels_and_heat.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/16-12-21_final_model_no_sep.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/16-12-21_super_deep.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/17-12-21_fukiama_model_also_heat.py
-srun python3 -u /home/au567859/DataHandling/notebooks/17-12-21_final_model_no_sep_heat.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-02-16_final_model_all_vels_and_heat_pr0025.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-02-21_final_model_all_vels_and_heat_pr071_padding.py
+srun python3 -u /home/au567859/DataHandling/notebooks/22-02-17_predict_new_models.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/test.py

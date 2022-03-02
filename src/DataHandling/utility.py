@@ -3,7 +3,7 @@
 def get_runs_wandb():
     import wandb
     api = wandb.Api()
-    entity, project = "dragethor", "Thesis"  # set to your entity and project
+    entity, project = "stig04", "Thesis"  # set to your entity and project
     runs = api.runs(entity + "/" + project)
     summary_list, config_list, name_list = [], [], []
     for run in runs:
