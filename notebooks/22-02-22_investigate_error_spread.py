@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 path_of_output="/home/au567859/DataHandling/models/output"
 name_list, _ = utility.get_runs_wandb()
 
-model=name_list[4]
+model=name_list[0]
 
 full_dir=os.path.join(path_of_output,model)
 subdirs=os.listdir(full_dir)
@@ -74,7 +74,7 @@ cm = 1/2.54  # centimeters in inches
 
 fig, axs=plt.subplots(1,1,figsize=([21*cm,10*cm]),sharex=True,sharey=True,constrained_layout=False,dpi=1000)
 
-name="fallen-cloud-32"
+name=model
 
 avg_mean =avg.mean()
 
@@ -86,3 +86,4 @@ for i in range(len(avg)):
 pcm=axs.imshow(np.transpose(avg),cmap='viridis',aspect=0.5)
 axs.set_title(name.capitalize(),weight="bold")
 plt.axis('off')
+# %%

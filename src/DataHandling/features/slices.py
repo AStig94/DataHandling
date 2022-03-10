@@ -1,34 +1,3 @@
-def periodic_padding_flexible(tensor, axis, padding):
-    """
-        add periodic padding to a tensor for specified axis
-        tensor: input tensor
-        axis: on or multiple axis to pad along, int or tuple
-        padding: number of cells to pad, int or tuple
-
-        return: padded tensor
-    """
-
-
-    if isinstance(axis,int):
-        axis = (axis,)
-    if isinstance(padding,int):
-        padding = (padding,)
-
-    ndim = len(tensor.shape)
-    for ax,p in zip(axis,padding):
-        # create a slice object that selects everything from all axes,
-        # except only 0:p for the specified for right, and -p: for left
-
-        ind_right = [slice(-p,None) if i == ax else slice(None) for i in range(ndim)]
-        ind_left = [slice(0, p) if i == ax else slice(None) for i in range(ndim)]
-        right = tensor[ind_right]
-        left = tensor[ind_left]
-        middle = tensor
-        tensor = tf.concat([right,middle,left], axis=ax)
-
-    return tensor
-
-
 
 
 def feature_description(save_loc):
@@ -142,7 +111,7 @@ def load_from_scratch(y_plus,var,target,normalized,repeat=10,shuffle_size=100,ba
         dataset=dataset.shuffle(buffer_size=shuffle_size)
         dataset=dataset.repeat(repeat)
         dataset=dataset.batch(batch_size=batch_s)
-        dataset=dataset.prefetch(3)
+        dataset=dataset.prefetch(3) 
         data.append(dataset)
     return data
 
@@ -308,7 +277,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
         """
         num_snapshots=len(slice_array['time'])
         train=np.arange(0,num_snapshots)
-        validation=np.random.choice(train,size=int(num_snapshots*validation_split),replace=False)
+        validation=np.random.choice(train,size=int(num_snapshots*validation_split),replace=False) # replace secures that the same value can't be used twice
         train=np.setdiff1d(train,validation)
         test=np.random.choice(train,size=int(num_snapshots*test_split),replace=False)
         train=np.setdiff1d(train,test)
@@ -387,7 +356,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
 
     wall_1=slice_array.sel(y=utility.y_plus_to_y(y_plus),method="nearest")
     wall_1[target[0]]=target_slice1
-    wall_1=wall_1[var]
+    wall_1=wall_1[var]  # Remember target is appended to var further up
 
     #wall_2=slice_array.sel(y=utility.y_plus_to_y(other_wall_y_plus),method="nearest")
     #wall_2[target[0]]=target_slice2
@@ -447,6 +416,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
 
     save_load_dict(var,save_loc)
     client.close()
+    var.pop()   # Remove target again, as it can change the original var used next
     del wall_1
     return None
 

@@ -14,5 +14,19 @@ conda activate tf_gpu
 
 #srun python3 -u /home/au567859/DataHandling/notebooks/22-02-16_final_model_all_vels_and_heat_pr0025.py
 #srun python3 -u /home/au567859/DataHandling/notebooks/22-02-21_final_model_all_vels_and_heat_pr071_padding.py
-srun python3 -u /home/au567859/DataHandling/notebooks/22-02-17_predict_new_models.py
-#srun python3 -u /home/au567859/DataHandling/notebooks/test.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-02-17_predict_new_models.py
+
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvw_pr0025.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvwT_pr0025.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvwT_pr071.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvwT_pr02.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvw_pr02.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvw_pr071.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus15_uvw_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus15_uvwT_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus30_uvw_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus50_uvwT_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus50_uvw_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus30_uvwT_pr1.py
+#srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvwT_pr1.py
+srun python3 -u /home/au567859/DataHandling/notebooks/22-03-08_final_model_padding8_yplus75_uvw_pr1.py

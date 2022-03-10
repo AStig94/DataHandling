@@ -1,7 +1,7 @@
 
 
 #%%
-
+#%%
 """ Det her script kører igemmen alle modeller fra Wandb af i SlURM array mode.
     Ud fra modelnavnet finder den frem til hvor modellen er gemt og hvor dens data ligger i models/output. Hvis der ikke findes en paraquet fil med error
     data generes dette, og ellers springer den over(vedmindre overwrite er sat til true). Derefter generes billeder
@@ -26,9 +26,9 @@ import matplotlib.pyplot as plt
 
 
 
-overwrite=True
-overwrite_pics=True
-overwrite_pdf=True
+overwrite=False
+overwrite_pics=False
+overwrite_pdf=False
 
 path_of_output="/home/au567859/DataHandling/models/output"
 name_list, _ = utility.get_runs_wandb()

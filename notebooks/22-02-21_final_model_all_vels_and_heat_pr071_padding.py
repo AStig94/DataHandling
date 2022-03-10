@@ -41,15 +41,15 @@ data=slices.load_from_scratch(y_plus,var,target,normalized,repeat=repeat,shuffle
 train=data[0]
 validation=data[1]
 
-padding=5
-model=models.final_skip_no_sep_padding2(var,activation)
+padding=8
+model=models.final_skip_no_sep_padding(var,activation,padding)
 model.summary()
 
 #keras.utils.plot_model(model,show_shapes=True,dpi=100)
 
 #%%
 
-wandb.init(project="Thesis",notes="Final with all vels and heat")
+wandb.init(project="Thesis",notes="8 layers of periodic padding")
 
 
 
@@ -68,6 +68,7 @@ config.dropout=dropout
 config.normalized=normalized
 config.skip=skip
 config.model=model_type
+config.padding=padding
 
 
 

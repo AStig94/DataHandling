@@ -6,11 +6,12 @@ import wandb
 import os
 
 name_list, config_list = utility.get_runs_wandb()
-y_plus=15
+#y_plus=15
 overwrite=False
 normalized=False
 
 for i in name_list:
+    y_plus = config_list[name_list.index(i)]['y_plus']
     var = config_list[name_list.index(i)]['variables']
     target=[config_list[name_list.index(i)]['target']]
     model_path, output_path = utility.model_output_paths(i,y_plus,var,target,normalized)
