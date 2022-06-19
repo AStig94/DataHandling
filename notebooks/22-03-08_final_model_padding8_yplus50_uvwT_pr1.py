@@ -24,7 +24,7 @@ os.environ['WANDB_DISABLE_CODE']='True'
 
 
 var=['u_vel',"v_vel","w_vel","pr1"]
-target=['pr0.1_flux']
+target=['pr1_flux']
 normalized=False
 y_plus=50
 
