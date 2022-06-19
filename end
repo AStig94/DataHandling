@@ -1,0 +1,77 @@
+bd4db74 Large commit
+9241069 Large commit
+23a2778 Large commit
+46414f6 Large commit
+f43112d Stage test
+0c40c36 Update github
+f43a572 Update of github
+bd98aa1 Staging nondeleted files
+b375e83 New models, and save before major change
+44ce312 Added padding-network
+a2e268b Added padding-networks and new networks trained
+6383663 Changed auid
+3bb655e More documentation
+b721435 new plots an update funcs
+9e2f4f3 new plots
+ea1c879 made model work and new plots
+d60042a new plots
+65ca87f new plots part 1
+04f8467 new plots
+1681a53 new plots
+e22061a new pics
+773bf6c new pics
+e463028 testing at other pr done
+d593f18 new plots and ready to test at other pr
+5abc00c new axis and change to paraquet for data
+74e8593 new plots and data
+409dae7 New folder struct
+72824fc more models and new plots
+321a3f3 More models etc
+ed0085b Bunch of new data!
+b559118 Bunch of new models
+60b881e New PDF and ML files
+e34f51f new plots generated
+f5b014c update error
+229a620 new pdf function
+da6476f First multi input + heat cnn
+b78228d New models,error,func and plot func
+9f47807 new plot func
+e3d59c7 Proper plot func and save of model
+06cde9f Test of normalize, skip and dropout
+b49342c new load and save. Normalize added to save
+8d3ac28 new save func
+2616e80 Change in save func and other
+839460f New CNN
+ff65da4 Proper CNN and moved files
+dfb7cf5 Moved stuff and plot
+fcf4d25 made save_zarr done and ready to cnn
+9b14e9c new save func and almost ready to cnn
+785aff2 starting CNN
+ccef3a8 Small changes in location and load func
+317f07d Got load data to work!
+ae3dc0b Loading data slices
+8b90e49 Worked with first CNN. Problems with dataset
+a7612cf progress on first ML attempt
+57d613b Keras ml test
+d0dfa47 Merge remote-tracking branch 'origin/master'
+f61e136 Added most from notebooks to functions. Ready to make a simple neural network
+97c6e83 FGet everything under control once again
+d47d7a3 Combined all read .u files into make dataset and moved read valdata
+99757d9 Move refractored notebooks to a refractored folder and deleted some notesbooks
+e91ee72 Somthing went wrong uploading from pycharm...
+6095f47 Ready to refractor in pycharm
+c920ad9 Got zarr and dask to work
+cfda4a0 Almost got convergence done
+f21304f Last try on getting dask to convert files
+b7c5966 More work on getting dask to work
+7b68b09 On cluster
+6887af0 Merge remote-tracking branch 'origin/master'
+6fc6e11 Fik tonetCDF med op
+7ea681c test x2
+6c7a899 test af ny git på cluster
+21bf8cf Trying to get dask to work along with the readBinary file
+5d73fe4 Made a converter to netCDF files. Configuring the dask-slurm cluster
+57959d0 Made a new jupyer notebook for importing all the data into one array(not done)
+d3f1867 New test file and import of read_binary.py
+30191e6 Ignore data folder
+d159c19 First commit
