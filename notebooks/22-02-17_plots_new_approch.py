@@ -1,6 +1,3 @@
-
-
-#%%
 #%%
 """ Det her script kører igemmen alle modeller fra Wandb af i SlURM array mode.
     Ud fra modelnavnet finder den frem til hvor modellen er gemt og hvor dens data ligger i models/output. Hvis der ikke findes en paraquet fil med error
@@ -27,21 +24,21 @@ import matplotlib.pyplot as plt
 
 
 overwrite=False
-overwrite_pics=False
-overwrite_pdf=False
+overwrite_pics=True
+overwrite_pdf=True
 
 path_of_output="/home/au567859/DataHandling/models/output"
 name_list, _ = utility.get_runs_wandb()
 
-slurm_arrary_id = int(os.getenv('SLURM_ARRAY_TASK_ID'))
+#slurm_arrary_id = int(os.getenv('SLURM_ARRAY_TASK_ID'))
+
 
 
 #%%
-
-
-model=name_list[slurm_arrary_id]
+#model=name_list[slurm_arrary_id]
 #importlib.reload(plots)
-#model=name_list[-4]
+#model=name_list[0]
+model='bumbling-shape-52'
 
 full_dir=os.path.join(path_of_output,model)
 subdirs=os.listdir(full_dir)
@@ -57,20 +54,24 @@ for dir in subdirs:
     index_target = dir_split.index("TARGETS")
 
     var = dir_split[index_vars_s+1:index_target]
-    target = dir_split[index_target+1:]
+
+    if '|' in dir_split[index_target+1:][0]:
+        target=dir_split[index_target+1:][0].split('|')
+    else:
+        target = dir_split[index_target+1:] 
+        
     if "normalized" not in dir_split:
         normalize = False
     else:
         normalize = True
         target = target[:-1]
 
-    if target[0][-5:] == '_flux':
+    if 'flux' in target[0]:
         target_type = "flux"
-    elif target[0] == 'tau_wall':
+    elif 'tau_wall' in target[0]:
         target_type = "stress"
 
     model_path, output_path =utility.model_output_paths(model,y_plus,var,target,normalize)
-
 
     prediction_path=os.path.join(output_path,'predictions.npz')
     target_path=os.path.join(output_path,'targets.npz')
@@ -91,7 +92,7 @@ for dir in subdirs:
         else:
             target_list=[targ["train"],targ["val"],targ["test"]]
             predctions=[pred["train"],pred["val"],pred["test"]]
-
+#%%
             names=["train","validation","test"]
 
             if os.path.exists(os.path.join(output_path,"Error_fluct_test.parquet")):
@@ -124,18 +125,18 @@ for dir in subdirs:
             
             if os.path.exists(os.path.join(output_path,"target_prediction.pdf")):
                 if overwrite==True or overwrite_pics==True:
-                    if target[0][-5:] == '_flux':
+                    if 'flux' in target[0]:
                         plots.heatmap_quarter(predctions,target_list,output_path,target)
-                    elif target[0]=="tau_wall":
+                    elif 'tau_wall' in target[0]:
                         plots.heatmap_quarter(predctions,target_list,output_path,target)
                     else:
                         plots.heatmap_quarter_test(predctions[0],target_list[0],output_path,target)
                 else:
                     print('heatmaps allready exist and overwrite is false',flush=True)        
             else:
-                if target[0][-5:] == '_flux':
+                if 'flux' in target[0]:
                     plots.heatmap_quarter(predctions,target_list,output_path,target)
-                elif target[0]=="tau_wall":
+                elif 'tau_wall' in target[0]:
                     plots.heatmap_quarter(predctions,target_list,output_path,target)
                 else:
                     plots.heatmap_quarter_test(predctions[0],target_list[0],output_path,target)
