@@ -60,3 +60,4 @@ wall_2=wall_2[var]
 var2=['u_vel_30']
 wall_2=wall_2.rename({var[0]:var2[0]})
 # %%
+wall_1[var2[0]]=wall_2[var2[0]]
