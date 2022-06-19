@@ -89,7 +89,7 @@ models/backup/
 models/logs/
 models/output/
 models/trained/
-notebooks/
+
 
 # Mac OS-specific storage files
 .DS_Store
