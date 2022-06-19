@@ -81,11 +81,16 @@ target/
 
 # exclude data from source control by default
 /data/
+/data_test/
 *.zarr
 wandb/
 run*/
 models/backup/
 models/logs/
+models/output/
+models/trained/
+notebooks/
+
 # Mac OS-specific storage files
 .DS_Store
 
