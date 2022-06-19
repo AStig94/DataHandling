@@ -20,12 +20,12 @@ def get_runs_wandb():
     return name_list, config_list
 
 
-def model_output_paths(model_name,y_plus,var,target,normalized):
+def model_output_paths(model_name,y_plus,var,target,normalized,test=False):
     import os
     from DataHandling.features import slices
 
     model_path=os.path.join("/home/au567859/DataHandling/models/trained/",model_name)
-    data_path=slices.slice_loc(y_plus,var,target,normalized)+"/"
+    data_path=slices.slice_loc(y_plus,var,target,normalized,test)+"/"
     data_folder=os.path.basename(os.path.dirname(data_path))
     output_path='/home/au567859/DataHandling/models/output'
     output_path=os.path.join(output_path,model_name)

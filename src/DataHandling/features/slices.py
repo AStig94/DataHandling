@@ -1,5 +1,10 @@
 
 
+from re import S
+
+from scipy.fftpack import ss_diff
+
+ 
 def feature_description(save_loc):
     """Loads the json file descriping the file format for parsing the tfRecords. For now only array_serial has been implemented!
        Furthermore the last entry is allways the target.
@@ -51,12 +56,23 @@ def read_tfrecords(serial_data,format,target):
             dict_for_dataset[key]=tf.io.parse_tensor(value,tf.float64)
         else:
             print("only arrays have been implemented")
-    
+       
+    if len(target)==1:
+        target_array=dict_for_dataset[target[0]]
+    #elif len(target)==4:
+    #    target_array=tf.stack([dict_for_dataset[target[0]],dict_for_dataset[target[1]],dict_for_dataset[target[2]],dict_for_dataset[target[3]]],axis=2)
+        
+    else:
+        target_array_list=[]
+        for i in range(len(target)):
+            target_array_i=dict_for_dataset[target[i]]
+            target_array_list.append(target_array_i)
+        target_array=tf.stack(target_array_list,axis=2)
 
-    target_array=dict_for_dataset[target[0]]
 
     #Removes the target from the dict
-    dict_for_dataset.pop(target[0])
+    for i in target:
+        dict_for_dataset.pop(i)
 
      
     return (dict_for_dataset,target_array)
@@ -117,7 +133,7 @@ def load_from_scratch(y_plus,var,target,normalized,repeat=10,shuffle_size=100,ba
 
 
 
-def load_validation(y_plus,var,target,normalized):
+def load_validation(y_plus,var,target,normalized,test=False):
     """A load function where the validation, test and train are loaded as one giant batch
 
     Args:
@@ -138,7 +154,8 @@ def load_validation(y_plus,var,target,normalized):
     import os
     import shutil
     from DataHandling.features.slices import slice_loc,feature_description,read_tfrecords
-    save_loc=slice_loc(y_plus,var,target,normalized)
+    
+    save_loc=slice_loc(y_plus,var,target,normalized,test)
 
     if not os.path.exists(save_loc):
         raise Exception("data does not exist. Make som new")
@@ -172,7 +189,6 @@ def load_validation(y_plus,var,target,normalized):
     dataset = tf.data.TFRecordDataset([data_loc],compression_type='GZIP',buffer_size=100,num_parallel_reads=tf.data.experimental.AUTOTUNE)
     dataset=dataset.map(lambda x: read_tfrecords(x,features_dict,target),num_parallel_calls=tf.data.experimental.AUTOTUNE)
     dataset=dataset.batch(len_data_val)
-    #OBS!! her burde de vel være len_data_train???? Eller er det datasæt bare for stort??
     #dataset=dataset.batch(10)
     dataset=dataset.take(1)
     for i in dataset:
@@ -198,7 +214,7 @@ def load_validation(y_plus,var,target,normalized):
 
 
 
-def save_tf(y_plus,var,target,data,normalized=False):
+def save_tf(y_plus,var,target,data,normalized=False,var_second=None,y_plus_second=None,test_split=0.1,validation_split=0.2,test=False):
     """Takes a xarray dataset extracts the variables in var and saves them as a tfrecord
 
     Args:
@@ -264,7 +280,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
         return proto.SerializeToString()
 
 
-    def split_test_train_val(slice_array,test_split=0.1,validation_split=0.2):
+    def split_test_train_val(slice_array,test_split,validation_split):
         """Splits the data into train,test,val
 
         Args:
@@ -304,10 +320,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
 
     client, cluster =utility.slurm_q64(1,time='0-01:30:00',ram='50GB')
 
-    save_loc=slice_loc(y_plus,var,target,normalized)
     
-    #append the target
-    var.append(target[0])
 
 
     #select y_plus value and remove unessary components. Normalize if needed
@@ -320,43 +333,110 @@ def save_tf(y_plus,var,target,data,normalized=False):
     if target[0]=='tau_wall':
         target_slice1=slice_array['u_vel'].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest")
         target_slice1=nu*target_slice1
+        # To get values positive:
+        #posi=np.abs(np.floor((target_slice1.min().values) * 1000)/1000.0)
+        #target_slice1=target_slice1+posi
+        
         
         #target_slice2=slice_array['u_vel'].differentiate('y').sel(y=slice_array['y'].max(),method="nearest")
         #target_slice2=nu*target_slice2
         
-        if normalized==True:
-            target_slice1=(target_slice1-target_slice1.mean(dim=('time','x','z')))/(target_slice1.std(dim=('time','x','z')))
+        #if normalized==True:
+            #target_slice1=(target_slice1-target_slice1.mean(dim=('time','x','z')))/(target_slice1.std(dim=('time','x','z')))
     
     #Checking if the target contains _flux
     elif target[0][-5:] =='_flux':
-        target_slice1=slice_array[target[0][:-5]].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest")
-        pr_number=float(target[0][2:-5])
-        target_slice1=nu/(pr_number)*target_slice1
+        if 'All' in target[0]:
+            target_slice_pr0025=nu/(0.025)*(slice_array['pr0.025'].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest"))
+            target_slice_pr02=nu/(0.2)*(slice_array['pr0.2'].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest"))
+            target_slice_pr071=nu/(0.71)*(slice_array['pr0.71'].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest"))
+            target_slice_pr1=nu/(1)*(slice_array['pr1'].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest"))
+
+            num_snapshots=len(slice_array['time'])
+            q, mod = divmod(num_snapshots,4)
+
+            target_slice1=xr.concat((target_slice_pr0025[0:q],target_slice_pr02[q:2*q],target_slice_pr071[2*q:3*q],target_slice_pr1[3*q:4*q+mod]),dim="time")
+
+        else:
+            target_slice1=slice_array[target[0][:-5]].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest")
+            pr_number=float(target[0][2:-5])
+            target_slice1=nu/(pr_number)*target_slice1
         
-        #target_slice2=slice_array[target[0][:-5]].differentiate('y').sel(y=slice_array['y'].max(),method="nearest")
-        #target_slice2=nu/(pr_number)*target_slice2
-        
-        if normalized==True:
-            target_slice1=(target_slice1-target_slice1.mean(dim=('time','x','z')))/(target_slice1.std(dim=('time','x','z')))
-    else:
-        target_slice1=slice_array[target[0]].sel(y=utility.y_plus_to_y(0),method="nearest")
+            #target_slice2=slice_array[target[0][:-5]].differentiate('y').sel(y=slice_array['y'].max(),method="nearest")
+            #target_slice2=nu/(pr_number)*target_slice2
+            
+            if normalized==True:
+                target_slice1=(target_slice1-target_slice1.mean(dim=('time','x','z')))/(target_slice1.std(dim=('time','x','z')))
+    
 
-        #target_slice2=slice_array[target[0]].sel(y=slice_array['y'].max(),method="nearest")
-        if normalized==True:
-            target_slice1=(target_slice1-target_slice1.mean(dim=('time','x','z')))/(target_slice1.std(dim=('time','x','z')))
+    elif 'mix' in target[0]:
+        split = target[0].split('_')
+        del split[1:3]
+        num_snapshots=len(slice_array['time'])
+        q, mod = divmod(num_snapshots,len(split))
+
+        target_slice_list=[]
+        var_slice_list=[]
+        pr=[]
+
+        for i in range(len(split)):
+            mod_i= 0 if i<(len(split)-1) else mod
+            pr=np.append(pr,split[i].replace('pr',''))
+            
+            target_slice_pr=nu/(float(pr[i]))*(slice_array['pr'+pr[i]][(i*q):((i+1)*q+mod_i)].differentiate('y').sel(y=utility.y_plus_to_y(0),method="nearest"))
+            target_slice_list.append(target_slice_pr)
+
+            var_slice_pr = slice_array['pr'+pr[i]][(i*q):((i+1)*q+mod_i)]
+            var_slice_list.append(var_slice_pr)
+
+        target_slice1=xr.concat(target_slice_list,dim="time")
+        slice_array[var[3]]=xr.concat(var_slice_list,dim="time")
 
 
-    other_wall_y_plus=utility.y_to_y_plus(slice_array['y'].max())-y_plus
+    #Checking for InterMeDiate target
+    elif 'IMD' in target[0]:
+        y_plus_IMD = float(target[0][-2:])
+        target_slice_list= [None] * len(target)
+        for i in range(len(target)):
+            target_slice_list[i]=slice_array[target[i][:-6]].sel(y=utility.y_plus_to_y(y_plus_IMD),method="nearest")
+
+
+    #other_wall_y_plus=utility.y_to_y_plus(slice_array['y'].max())-y_plus
     
     if normalized==True:
         slice_array=(slice_array-slice_array.mean(dim=('time','x','z')))/(slice_array.std(dim=('time','x','z')))
 
     
-    
 
     wall_1=slice_array.sel(y=utility.y_plus_to_y(y_plus),method="nearest")
-    wall_1[target[0]]=target_slice1
+
+    # New input if two y_plus_values
+    if var_second !=None and y_plus_second!=None:
+        wall_2 = slice_array.sel(y=utility.y_plus_to_y(y_plus_second),method="nearest")
+        wall_1[var_second]=wall_2[var]
+        for feature in var_second:
+            var.append(feature)
+    
+
+
+    if len(target)>1:
+        for i in range(len(target)):
+            wall_1[target[i]]=target_slice_list[i]
+    else:
+        wall_1[target[0]]=target_slice1
+
+    save_loc=slice_loc(y_plus,var,target,normalized,test)
+    
+    #append the target
+    if len(target)>1:
+        for i in range(len(target)):
+            var.append(target[i])
+    else:
+        var.append(target[0])
+
     wall_1=wall_1[var]  # Remember target is appended to var further up
+
+
 
     #wall_2=slice_array.sel(y=utility.y_plus_to_y(other_wall_y_plus),method="nearest")
     #wall_2[target[0]]=target_slice2
@@ -366,7 +446,7 @@ def save_tf(y_plus,var,target,data,normalized=False):
     #wall_1,wall_2=dask.compute(*[wall_1,wall_2])
 
     #shuffle the data, split into 3 parts and save
-    train_1, validation_1, test_1 = split_test_train_val(wall_1)
+    train_1, validation_1, test_1 = split_test_train_val(wall_1,test_split,validation_split)
 
     wall_1=wall_1.compute()
     
@@ -416,12 +496,12 @@ def save_tf(y_plus,var,target,data,normalized=False):
 
     save_load_dict(var,save_loc)
     client.close()
-    var.pop()   # Remove target again, as it can change the original var used next
+    del var   # Remove target again, as it can change the original var used next
     del wall_1
     return None
 
 
-def slice_loc(y_plus,var,target,normalized):
+def slice_loc(y_plus,var,target,normalized,test=False):
     """where to save the slices
 
     Args:
@@ -438,11 +518,17 @@ def slice_loc(y_plus,var,target,normalized):
     var_sort=sorted(var)
     var_string="_".join(var_sort)
     target_sort=sorted(target)
-    target_string="_".join(target_sort)
-
-    if normalized==True:
-        slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string+"-normalized")
+    target_string="|".join(target_sort)
+    if test==False:
+        if normalized==True:
+            slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string+"-normalized")
+        else:
+            slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string)
     else:
-        slice_loc=os.path.join("/home/au567859/DataHandling/data/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string)
+        if normalized==True:
+            slice_loc=os.path.join("/home/au567859/DataHandling/data_test/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string+"-normalized")
+        else:
+            slice_loc=os.path.join("/home/au567859/DataHandling/data_test/processed",'y_plus_'+str(y_plus)+"-VARS-"+var_string+"-TARGETS-"+target_string)
+   
 
     return slice_loc

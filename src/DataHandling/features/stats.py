@@ -19,11 +19,11 @@ def get_valdata(quantity):
     import numpy as np
 
     if quantity == 'uTexa':
-        data = pd.read_csv("/home/au567859/NOBACKUP/data/external/validation/" + quantity + '_valData.csv', sep=' ',
+        data = pd.read_csv("/home/au567859/DataHandling/data_test/external/validation/" + quantity + '_valData.csv', sep=' ',
                            skiprows=1, header=None)
         data = data.dropna(axis=1)
     else:
-        data = pd.read_csv("/home/au567859/NOBACKUP/data/external/validation/" + quantity + '_valData.csv', sep=' ',
+        data = pd.read_csv("/home/au567859/DataHandling/data_test/external/validation/" + quantity + '_valData.csv', sep=' ',
                            skiprows=1, header=None)
         data = data.dropna(axis=1)
         data = data.drop(columns=[0])
@@ -70,6 +70,7 @@ def get_valdata(quantity):
 
 
 def calc_stats(ds,save_spot):
+    import os
     """
     Calculates the time stats and saves them in save_spot. Needs a running dask cluster
 
@@ -99,11 +100,16 @@ def calc_stats(ds,save_spot):
             mean=mean.drop(labels=val[0]+'_plusmean')
             mean=mean.drop(labels=val[0]+'_plusRMS')
             pr=float(val[2:])
-            theta_tau=mean_tem.differentiate('y')*pr
+            theta_tau=(mean_tem.isel(y_plus=1)-mean_tem.isel(y_plus=0))/((mean_tem.y_plus[0]-mean_tem.y_plus[1])*pr)
             theta_plus=mean_tem/theta_tau
             rms_pr=rms_tem/theta_tau
             mean[val+'_plusmean']=theta_plus
             mean[val+'_plusRMS']=rms_pr
         k=k+1
+    if os.path.exists(save_spot):
+        mean.to_netcdf(os.path.join(save_spot,'stats.nc'))
+    else:
+        os.makedirs(save_spot)
+        mean.to_netcdf(os.path.join(save_spot,'stats.nc'))
 
-    mean.to_netcdf(save_spot)
+

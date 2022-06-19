@@ -56,12 +56,13 @@ def threeD_plot(error_val,output_path):
 
 
     cm =1/2.54
-    fig = plt.figure(figsize=(15*cm,10*cm),dpi=200)
+    #fig = plt.figure(figsize=(15*cm,10*cm),dpi=200)
+    fig = plt.figure(figsize=(20*cm,15*cm),dpi=500)
     ax = plt.axes(projection='3d')
     surf = ax.plot_surface(xx, yy, np.transpose(avg), cmap='viridis', edgecolor='none')
-    ax.set_xlabel(r'$x^+$')
-    ax.set_ylabel(r'$z^+$')
-    ax.set_zlabel(r'Error $\%$')
+    ax.set_xlabel(r'$x^+$',labelpad=10)
+    ax.set_ylabel(r'$z^+$',labelpad=5)
+    ax.set_zlabel(r'$E_{RS}\ [\%]$',labelpad=5)
     ax.set_box_aspect((2,1,1))
 
     ax.set_xticks(placement_x)
@@ -71,7 +72,8 @@ def threeD_plot(error_val,output_path):
 
     ax.set_yticks(placement_z)
     ax.set_yticklabels(axis_range_z)
-    fig.colorbar(surf, shrink=0.3, aspect=5) # add color bar indicating the PDF
+    #fig.colorbar(surf, shrink=0.1, aspect=5,pad=0.1) # add color bar indicating the PDF
+    fig.colorbar(surf,pad=0.12,shrink=0.5,aspect=10)
     ax.view_init(30, 140)
     
     fig.savefig(os.path.join(output_path,'validation_3D.pdf'),bbox_inches='tight')
@@ -166,10 +168,14 @@ def error(target_list,target_type,names,predctions,output_path):
 
         #Global average errors
         global_mean_err=(np.mean(predctions)-np.mean(target_list))/(np.mean(target_list))*100
-        MSE_local_shear_stress=np.sqrt((np.mean((predctions-target_list)**2))/np.mean(target_list)**2)*100
+       
+        MSE_local_shear_stress=np.sqrt(np.mean((predctions-target_list)**2))/np.mean(target_list)*100
+        #MSE_local_shear_stress=np.sqrt((np.mean((predctions-target_list)**2))/np.mean(target_list)**2)*100
+        
         global_fluct_error=(np.std(fluc_predict)-np.std(fluc_target))/(np.std(fluc_target))*100
-        MSE_local_fluc=np.sqrt((np.mean((fluc_predict-fluc_target)**2))/np.std(fluc_target)**2)*100
-
+        
+        MSE_local_fluc=(np.sqrt(np.mean((fluc_predict-fluc_target)**2))/np.std(fluc_target))*100
+        #MSE_local_fluc=np.sqrt((np.mean((fluc_predict-fluc_target)**2))/np.std(fluc_target)**2)*100
         
 
         #MAE_local=np.mean(np.abs(predctions[i][:,:,:]-target_list[i][:,:,:]))/np.mean(np.abs(target_list[i][:,:,:]))*100
@@ -180,7 +186,9 @@ def error(target_list,target_type,names,predctions,output_path):
         
 
         #Local erros for PDF's and boxplots etc.
-        MSE_local_no_mean=np.sqrt(((predctions-target_list)**2)/np.mean(target_list)**2)*100
+        MSE_local_no_mean=(np.abs(predctions-target_list)/np.mean(target_list))*100
+        #MSE_local_no_mean=np.sqrt(((predctions-target_list)**2)/np.mean(target_list)**2)*100
+        
         #MSE_local_fluc_PDF=np.sqrt(((fluc_predict-fluc_target)**2)/(np.std(fluc_target))**2)*100
         
         return MSE_local_no_mean,global_mean_err,MSE_local_shear_stress,global_fluct_error,MSE_local_fluc
@@ -242,6 +250,7 @@ def heatmap_quarter_test(predction,target_var,output_path,target):
     import os
     import matplotlib.pyplot as plt
     import seaborn as sns
+    import math
     sns.set_theme()
     sns.set_style("ticks")
     sns.set_context("paper")
@@ -267,8 +276,8 @@ def heatmap_quarter_test(predction,target_var,output_path,target):
 
 
     if target[0]=='tau_wall':
-        target_var=target_var[1,:,:]/u_tau**2
-        predction=predction[1,:,:]/u_tau**2        
+        target_var=nu*target_var[1,:,:]/u_tau**2
+        predction=nu*predction[1,:,:]/u_tau**2        
 
         #cut the data to 1/4
         target_var=target_var[:128,:128]
@@ -370,10 +379,30 @@ def heatmap_quarter_test(predction,target_var,output_path,target):
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.2$',rotation=0)
     elif target[0]=='pr0.025_flux':
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.71_flux_IMD_15':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.71$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='u_vel_15':
+        cbar.ax.set_xlabel(r'$u_vel$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or1$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or071$',rotation=0)
+    elif target[0]=='pr0.045_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.045$',rotation=0)
+    elif target[0]=='pr0.18_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.18$',rotation=0)
+    elif target[0]=='pr0.22_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.22$',rotation=0)
+    elif target[0]=='pr0.69_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.69$',rotation=0)
     else: 
         raise Exception('target name is not defined')
 
-    fig.savefig(os.path.join(output_path,'target_prediction.pdf'),bbox_inches='tight',format='pdf')
+    fig.savefig(os.path.join(output_path,'target_prediction_OnlyTest.pdf'),bbox_inches='tight',format='pdf')
 
 
     max_diff=np.max(target_var-predction)
@@ -407,10 +436,31 @@ def heatmap_quarter_test(predction,target_var,output_path,target):
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.2$',rotation=0)
     elif target[0]=='pr0.025_flux':
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.71_flux_IMD_15':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.71$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='u_vel_15':
+        cbar.ax.set_xlabel(r'$u_vel$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or1$',rotation=0)
+    elif target[0]=='pr0.045_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.045$',rotation=0)
+    elif target[0]=='pr0.18_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.18$',rotation=0)
+    elif target[0]=='pr0.22_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.22$',rotation=0)
+    elif target[0]=='pr0.69_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.69$',rotation=0)
+
     else: 
         raise Exception('target name is not defined')
 
-    fig2.savefig(os.path.join(output_path,'difference.pdf'),bbox_inches='tight',format='pdf')
+    fig2.savefig(os.path.join(output_path,'difference_OnlyTest.pdf'),bbox_inches='tight',format='pdf')
 
 
 
@@ -449,16 +499,18 @@ def heatmap_quarter(predctions,target_list,output_path,target):
 
 
 
-    if target[0]=='tau_wall':
+    if 'tau_wall' in target[0]:
         for i in range(len(target_list)):
-            target_list[i]=target_list[i][1,:,:]/u_tau**2
-            predctions[i]=predctions[i][1,:,:]/u_tau**2        
+            target_list[i]=nu*target_list[i][1,:,:]/u_tau**2
+            #target_list[i]=(target_list[i]-np.mean(target_list[i]))/np.std(target_list[i])
+            predctions[i]=nu*predctions[i][1,:,:]/u_tau**2    
+            #predctions[i]=(predctions[i]-np.mean(predctions[i]))/np.std(predctions[i])    
 
             #cut the data to 1/4
             target_list[i]=target_list[i][:128,:128]
             predctions[i]=predctions[i][:128,:128]
             
-    elif target[0][-5:]=='_flux':
+    elif 'flux' in target[0]:
         fric_temp=Q_avg/u_tau
         for i in range(len(target_list)):
             target_list[i]=target_list[i][1,:,:]/Q_avg
@@ -467,11 +519,15 @@ def heatmap_quarter(predctions,target_list,output_path,target):
             #cut the data to 1/4
             target_list[i]=target_list[i][:128,:128]
             predctions[i]=predctions[i][:128,:128]
+    elif len(target)==4:
+        target=['u_vel_15']
+        for i in range(len(target_list)):
+            target_list[i]=target_list[i][1,:,:,0]
+            predctions[i]=predctions[i][1,:,:,0]
 
-        #Need to find the average surface heat flux Q_w
-        #Friction temp = Q_w/(u_tau)
-        #q^+= q/(Friction temp)
-
+            #cut the data to 1/4
+            target_list[i]=target_list[i][:128,:128]
+            predctions[i]=predctions[i][:128,:128]
 
 
     #Find highest and lowest value to scale plot to
@@ -566,6 +622,26 @@ def heatmap_quarter(predctions,target_list,output_path,target):
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.2$',rotation=0)
     elif target[0]=='pr0.025_flux':
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.71_flux_IMD_15':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.71$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='u_vel_15':
+        cbar.ax.set_xlabel(r'$u_vel$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or1$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or071$',rotation=0)
+    elif target[0]=='pr0.045_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.045$',rotation=0)
+    elif target[0]=='pr0.18_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.18$',rotation=0)
+    elif target[0]=='pr0.22_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.22$',rotation=0)
+    elif target[0]=='pr0.69_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.69$',rotation=0)
     else: 
         raise Exception('target name is not defined')
 
@@ -604,6 +680,27 @@ def heatmap_quarter(predctions,target_list,output_path,target):
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.2$',rotation=0)
     elif target[0]=='pr0.025_flux':
         cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.71_flux_IMD_15':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.71$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='All_pr_flux' or target[0]=='pr0.025_flux_mix_pr0.2_pr0.71_pr1':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or0.71or1$',rotation=0)
+    elif target[0]=='u_vel_15':
+        cbar.ax.set_xlabel(r'$u_vel$',rotation=0)
+    elif target[0]=='pr0.025_flux_mix_pr0.2_pr0.71':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.025or0.2or1$',rotation=0)
+    elif target[0]=='pr0.045_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.045$',rotation=0)
+    elif target[0]=='pr0.18_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.18$',rotation=0)
+    elif target[0]=='pr0.22_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.22$',rotation=0)
+    elif target[0]=='pr0.69_flux':
+        cbar.ax.set_xlabel(r'$\frac{q_w}{\overline{q_{w,DNS}}},\quad Pr=0.69$',rotation=0)
+
     else: 
         raise Exception('target name is not defined')
 
@@ -652,7 +749,7 @@ def heatmaps(target_list,names,predctions,output_path,model_path,target):
     Q_avg=0.665
     
     
-    if target[0]=='tau_wall':
+    if 'tau_wall' in target[0]:
         for i in range(len(target_list)):
             target_list[i]=target_list[i][1,:,:]/u_tau
             predctions[i]=predctions[i][1,:,:]/u_tau        
@@ -663,7 +760,7 @@ def heatmaps(target_list,names,predctions,output_path,model_path,target):
             
 
     
-    elif target[0][-5:] =='_flux':
+    elif 'flux' in target[0]:
         fric_temp=Q_avg/u_tau
         for i in range(len(target_list)):
             target_list[i]=target_list[i][1,:,:]/Q_avg
@@ -793,13 +890,14 @@ def heatmaps(target_list,names,predctions,output_path,model_path,target):
 
 
 
-def stat_plots(mean_dataset_loc,batches):
+def stat_plots(mean_dataset_loc,batches,pr_list):
     from DataHandling.features.stats import get_valdata
     import matplotlib.pyplot as plt
     import xarray as xr
     import numpy as np
     
     mean = xr.open_mfdataset(mean_dataset_loc, parallel=True)
+
     mean = mean.persist()
     mean = mean.groupby_bins("time", batches).mean()
 
@@ -819,10 +917,10 @@ def stat_plots(mean_dataset_loc,batches):
     ax1.plot(linerRegion, linerRegion, 'r', label='Linear Region')
     ax1.plot(np.linspace(20, 180), logRegion, 'm', linewidth=5, label='Log Region')
 
-    ax1.set_title('Normalized mean values')
+    ax1.set_title('Normalized mean values', fontsize=26)
     ax1.set_xscale('log')
-    ax1.set_xlabel('$y^{+}$')
-    ax1.set_ylabel('$<u^{+}>$')
+    ax1.set_xlabel('$y^{+}$', fontsize=20)
+    ax1.set_ylabel(r'$\overline{u^{+}}$', fontsize=20)
     ax1.set_xlim(1, 300)
     ax1.set_ylim(0, 20)
     ax1.minorticks_on()
@@ -832,19 +930,19 @@ def stat_plots(mean_dataset_loc,batches):
     # Now for <u_rms>
 
     ax2.plot('y+', 'u_plusRMS', 'ok', data=val_u, label='DNS validation data')
-    ax2.set_title('Normalized RMS of fluctuations')
+    ax2.set_title('Normalized RMS of fluctuations', fontsize=26)
     for i in range(len(mean.time_bins)):
         ax2.plot(mean.y_plus, mean.u_plusRMS.isel(time_bins=i), colorList[i], label='DNS batch ' + str(i))
 
     ax2.set_xscale('log')
-    ax2.set_xlabel('$y^{+}$')
-    ax2.set_ylabel("$u^{+}_{RMS}$")
+    ax2.set_xlabel('$y^{+}$', fontsize=20)
+    ax2.set_ylabel(r"$\overline{u^{+}_{RMS}}$", fontsize=20)
     ax2.set_xlim(1, 300)
     ax2.minorticks_on()
     ax2.grid(True, which="both", linestyle='--')
     ax2.legend(prop={"size": 17})
     plt.tight_layout()
-    plt.savefig("/home/au643300/DataHandling/reports/figures/u_val.pdf", bbox_inches='tight')
+    plt.savefig("/home/au567859/DataHandling/reports/figures_test/u_val.pdf", bbox_inches='tight')
 
     a = get_valdata('pr1')
     b = get_valdata('pr71')
@@ -858,13 +956,13 @@ def stat_plots(mean_dataset_loc,batches):
     figScale = 2
 
     fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12 * figScale, 6 * figScale))
-    ax1.plot('pr1_y+', 'pr1_plusmean', 'ok', data=val_pr, label='DNS validation data Pr=1')
+    #ax1.plot('pr1_y+', 'pr1_plusmean', 'ok', data=val_pr, label='DNS validation data Pr=1')
     ax1.plot('pr0.71_y+', 'pr0.71_plusmean', 'or', data=val_pr, label='DNS validation data Pr=0.71')
     ax1.plot('pr0.025_y+', 'pr0.025_plusmean', 'om', data=val_pr, label='DNS validation data Pr=0.025')
     colorList = ['*b', '*c', '*y', '*g', '.b', '.c', '.y', '.g', 'vb', 'vc', 'vy', 'vg', '<b', '<c', '<y', '<g'] * 30
 
     # Plotting the batches in mean for the different Pr
-    pr_list = ['pr1', 'pr0.71', 'pr0.2', 'pr0.025']
+    #pr_list = ['pr1', 'pr0.71', 'pr0.2', 'pr0.025']
     j = 0
     for i in range(len(mean.time_bins)):
         for Pr in pr_list:
@@ -878,10 +976,10 @@ def stat_plots(mean_dataset_loc,batches):
         ax1.plot(linerRegion, linerRegion * float(Pr[2:]), dualColor[i % 2],
                  label='Linear Region y+*Pr ' + 'Pr=' + Pr[2:])
         j = j + 1
-
+    ax1.set_title('Normalized mean values', fontsize=26)
     ax1.set_xscale('log')
-    ax1.set_xlabel('$y^+$')
-    ax1.set_ylabel(r'$<\theta^{+}>$')
+    ax1.set_xlabel('$y^+$', fontsize=20)
+    ax1.set_ylabel(r'$\overline{\theta^{+}}$', fontsize=20)
     ax1.set_xlim(1, 300)
     ax1.set_ylim(0, 20)
     ax1.grid(True, which="both", linestyle='--')
@@ -889,10 +987,10 @@ def stat_plots(mean_dataset_loc,batches):
 
     # Now for <Pr_rms>
 
-    ax2.plot('pr1_y+', 'pr1_plusRMS', 'ok', data=val_pr, label='DNS validation data Pr=1')
+    #ax2.plot('pr1_y+', 'pr1_plusRMS', 'ok', data=val_pr, label='DNS validation data Pr=1')
     ax2.plot('pr0.71_y+', 'pr0.71_plusRMS', 'or', data=val_pr, label='DNS validation data Pr=0.71')
     ax2.plot('pr0.025_y+', 'pr0.025_plusRMS', 'om', data=val_pr, label='DNS validation data Pr=0.025')
-    ax2.set_title('Normalized RMS of fluctuations')
+    ax2.set_title('Normalized RMS of fluctuations', fontsize=26)
     j = 0
     for i in range(len(mean.time_bins)):
         for Pr in pr_list:
@@ -901,12 +999,12 @@ def stat_plots(mean_dataset_loc,batches):
             j = j + 1
 
     ax2.set_xscale('log')
-    ax2.set_xlabel('$y^+$')
-    ax2.set_ylabel(r'$\theta ^{+}_{RMS}$')
+    ax2.set_xlabel('$y^+$', fontsize=20)
+    ax2.set_ylabel(r'$\overline{\theta ^{+}_{RMS}}$', fontsize=20)
     ax2.set_xlim(1, 300)
     ax2.set_ylim(0, 3)
     ax2.grid(True, which="both", linestyle='--')
     ax2.legend(loc='best', prop={"size": 15})
 
     plt.tight_layout()
-    plt.savefig("/home/au643300/DataHandling/reports/figures/Pr_val.pdf", bbox_inches='tight')
+    plt.savefig("/home/au567859/DataHandling/reports/figures_test/Pr_val.pdf", bbox_inches='tight')

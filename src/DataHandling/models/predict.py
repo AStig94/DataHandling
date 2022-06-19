@@ -1,4 +1,4 @@
-def predict(model_name,overwrite,model,y_plus,var,target,normalized):
+def predict(model_name,overwrite,model,y_plus,var,target,normalized,test=False):
     """Uses a trained model to predict with
 
     Args:
@@ -16,7 +16,7 @@ def predict(model_name,overwrite,model,y_plus,var,target,normalized):
     import shutil
     import numpy as np
     
-    _,output_path=utility.model_output_paths(model_name,y_plus,var,target,normalized)
+    _,output_path=utility.model_output_paths(model_name,y_plus,var,target,normalized,test)
 
 
     data_exist=False
@@ -34,7 +34,7 @@ def predict(model_name,overwrite,model,y_plus,var,target,normalized):
 
 
     if data_exist==False:
-        data=slices.load_validation(y_plus,var,target,normalized)
+        data=slices.load_validation(y_plus,var,target,normalized,test)
         feature_list=[]
         target_list=[]
 
@@ -46,11 +46,12 @@ def predict(model_name,overwrite,model,y_plus,var,target,normalized):
 
         predctions=[]
 
-        predctions.append(model.predict(feature_list[0]))
-        predctions.append(model.predict(feature_list[1]))
-        predctions.append(model.predict(feature_list[2]))
+        predctions.append(model.predict(feature_list[0],batch_size=10))
+        predctions.append(model.predict(feature_list[1],batch_size=10))
+        predctions.append(model.predict(feature_list[2],batch_size=10))
 
-        predctions=[np.squeeze(x,axis=3) for x in predctions]
+        if len(target)==1:
+            predctions=[np.squeeze(x,axis=3) for x in predctions]
 
         np.savez_compressed(os.path.join(output_path,"predictions"),train=predctions[0],val=predctions[1],test=predctions[2])
         np.savez_compressed(os.path.join(output_path,"targets"),train=target_list[0],val=target_list[1],test=target_list[2])

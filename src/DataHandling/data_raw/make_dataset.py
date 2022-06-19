@@ -1,9 +1,10 @@
 
-def append_tozarr(store="/home/au567859/DataHandling/data/interim/data.zarr"):
+def append_tozarr(store="/home/au567859/DataHandling/data/interim/data.zarr",raw = "/home/au567859/DataHandling/data/raw/"):
     """appends new u files or creates a new zarr  array
 
     Args:
         store (Path, optional): where to put the zarr array. Defaults to "/home/au567859/DataHandling/data/interim/data.zarr".
+        raw (Path, optional): where the data is stored. Defaults to "/home/au567859/DataHandling/data/raw/"
 
     Returns:
         None: 
@@ -13,7 +14,6 @@ def append_tozarr(store="/home/au567859/DataHandling/data/interim/data.zarr"):
     import numpy as np
     import xarray as xr
 
-    raw = "/home/au567859/DataHandling/data/raw/"
 
     files = glob.glob(raw + '*.u')
     files = sorted(files)
@@ -132,10 +132,14 @@ def to_xarr(file_path):
             "u_vel": (['x', 'y', 'z'], quantities[0]),
             "v_vel": (['x', 'y', 'z'], quantities[1]),
             "w_vel": (['x', 'y', 'z'], quantities[2]),
-            "pr1": (['x', 'y', 'z'], quantities[3]),
-            "pr0.71": (['x', 'y', 'z'], quantities[4]),
-            "pr0.2": (['x', 'y', 'z'], quantities[5]),
-            "pr0.025": (['x', 'y', 'z'], quantities[6]),
+            "pr0.69": (['x', 'y', 'z'], quantities[3]),
+            "pr0.22": (['x', 'y', 'z'], quantities[4]),
+            "pr0.18": (['x', 'y', 'z'], quantities[5]),
+            "pr0.045": (['x', 'y', 'z'], quantities[6]),
+            # "pr1": (['x', 'y', 'z'], quantities[3]),
+            # "pr0.71": (['x', 'y', 'z'], quantities[4]),
+            # "pr0.2": (['x', 'y', 'z'], quantities[5]),
+            # "pr0.025": (['x', 'y', 'z'], quantities[6]),
         },
         coords={
             "x": (["x"], xf),
